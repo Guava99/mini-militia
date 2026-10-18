@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 12" width="36" height="12">
+  <defs>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a1683a"/>
+      <stop offset="0.5" stop-color="#7a4a26"/>
+      <stop offset="1" stop-color="#4a2a14"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8b929d"/>
+      <stop offset="0.5" stop-color="#4a505a"/>
+      <stop offset="1" stop-color="#1f2328"/>
+    </linearGradient>
+  </defs>
+  <!-- stock -->
+  <path d="M0.4 3 L10.4 3.2 L10.4 6.6 L4.4 7.4 L0.4 10.4 Z" fill="url(#wood)" stroke="#2a1608" stroke-width="0.25"/>
+  <path d="M1.4 4 C4 4.4 7 4.4 10 4.2" fill="none" stroke="#c99a68" stroke-width="0.2" opacity="0.55"/>
+  <path d="M1.8 6.2 C4 6.4 6.4 6.2 8.4 5.8" fill="none" stroke="#3a1f0c" stroke-width="0.2" opacity="0.5"/>
+  <!-- receiver -->
+  <path d="M10.4 2.2 L17.2 2.2 L17.2 6.6 L10.4 6.8 Z" fill="url(#steel)" stroke="#0c0d0f" stroke-width="0.25"/>
+  <path d="M11 2.8 L16.8 2.8" stroke="#c9ced6" stroke-width="0.2" opacity="0.5"/>
+  <rect x="12.4" y="3.4" width="3.2" height="0.9" fill="#0f1114"/>
+  <!-- trigger + guard -->
+  <path d="M11.4 6.8 C11.4 9 14.4 9 14.4 6.8" fill="none" stroke="#14161a" stroke-width="0.4"/>
+  <path d="M12.6 6.8 L12.9 8.2" stroke="#14161a" stroke-width="0.35"/>
+  <!-- barrel + magazine tube -->
+  <rect x="17.2" y="2.7" width="18.4" height="2.1" fill="url(#steel)" stroke="#0c0d0f" stroke-width="0.22"/>
+  <rect x="17.2" y="5" width="14" height="1.5" fill="#2c3037" stroke="#0c0d0f" stroke-width="0.2"/>
+  <!-- pump -->
+  <path d="M19 5.4 L27 5.4 L27 8.6 L19 8.6 Z" fill="url(#wood)" stroke="#2a1608" stroke-width="0.25"/>
+  <path d="M20.2 5.8 L20.2 8.2 M21.4 5.8 L21.4 8.2 M22.6 5.8 L22.6 8.2 M23.8 5.8 L23.8 8.2 M25 5.8 L25 8.2" stroke="#3a1f0c" stroke-width="0.2" opacity="0.7"/>
+  <!-- bead sight + muzzle -->
+  <rect x="34" y="1.8" width="0.8" height="1" fill="#e8d9a0"/>
+  <rect x="35.3" y="2.5" width="0.5" height="2.5" fill="#07080a"/>
+  <!-- ejection port -->
+  <rect x="13" y="2.5" width="3" height="0.6" fill="#07080a"/>
+</svg>

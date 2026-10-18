@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 15" width="14" height="15">
+  <defs>
+    <linearGradient id="a" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#b9bec6"/>
+    </linearGradient>
+  </defs>
+  <!-- team band around the helmet and a small side patch (tinted in game) -->
+  <path d="M2.9 6.6 L5 5.3 L11 4.9 L12.9 5.5 L12.9 6.1 L10.9 5.5 L5.2 5.9 L3.4 7.4 Z" fill="url(#a)"/>
+  <path d="M5.2 2.2 L7.2 1.8 L7.4 3.4 L5.4 3.7 Z" fill="url(#a)" opacity="0.95"/>
+</svg>

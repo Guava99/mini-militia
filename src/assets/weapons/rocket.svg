@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 16" width="38" height="16">
+  <defs>
+    <linearGradient id="tube" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8f9a82"/>
+      <stop offset="0.45" stop-color="#576049"/>
+      <stop offset="1" stop-color="#262c1f"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8b929d"/>
+      <stop offset="1" stop-color="#2a2e35"/>
+    </linearGradient>
+    <linearGradient id="head" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5a1f1a"/>
+      <stop offset="1" stop-color="#b8423a"/>
+    </linearGradient>
+  </defs>
+  <!-- main launch tube -->
+  <rect x="2" y="3.4" width="29" height="6.2" rx="1" fill="url(#tube)" stroke="#12160e" stroke-width="0.3"/>
+  <path d="M2.4 4.2 L30.6 4.2" stroke="#d3dcc4" stroke-width="0.25" opacity="0.5"/>
+  <!-- bands -->
+  <rect x="8" y="3.2" width="1.2" height="6.6" fill="#1d2118"/>
+  <rect x="21" y="3.2" width="1.2" height="6.6" fill="#1d2118"/>
+  <!-- rear flare -->
+  <path d="M2 2.8 L0.2 1.6 L0.2 11.4 L2 10.2 Z" fill="url(#steel)" stroke="#07080a" stroke-width="0.25"/>
+  <!-- front warhead -->
+  <path d="M31 3.4 L34 3.8 L37.6 6.5 L34 9.2 L31 9.6 Z" fill="url(#head)" stroke="#2a0d0a" stroke-width="0.28"/>
+  <path d="M34 3.8 L34 9.2" stroke="#2a0d0a" stroke-width="0.3"/>
+  <path d="M31.6 4.4 L34 4.7 L36.6 6.2" stroke="#e9a49e" stroke-width="0.2" opacity="0.6" fill="none"/>
+  <!-- shoulder pad -->
+  <path d="M5 9.4 L12 9.4 L11.4 11.6 L5.6 11.6 Z" fill="#23272d" stroke="#07080a" stroke-width="0.2"/>
+  <!-- grip + trigger -->
+  <path d="M13.6 9.6 L17.4 9.6 L16.6 15 L12.8 15 Z" fill="#23262b" stroke="#07080a" stroke-width="0.22"/>
+  <path d="M13.2 11 L17 11 M13 12.4 L16.8 12.4 M12.9 13.8 L16.7 13.8" stroke="#555a63" stroke-width="0.18" opacity="0.7"/>
+  <path d="M17.6 9.8 C17.8 11.6 20.4 11.6 20.2 9.8" fill="none" stroke="#14161a" stroke-width="0.4"/>
+  <!-- fore grip -->
+  <path d="M24 9.6 L26.8 9.6 L26.4 13.4 L24.2 13.4 Z" fill="#23262b" stroke="#07080a" stroke-width="0.2"/>
+  <!-- optic -->
+  <rect x="12" y="1.2" width="7" height="2" rx="0.8" fill="url(#steel)" stroke="#07080a" stroke-width="0.2"/>
+  <rect x="14" y="2.8" width="3" height="0.8" fill="#14161a"/>
+  <ellipse cx="19" cy="2.2" rx="0.4" ry="0.9" fill="#4f8aa3"/>
+</svg>

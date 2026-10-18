@@ -1,0 +1,202 @@
+{
+ "id": "training-arena",
+ "name": "Training Arena",
+ "description": "Simple symmetric platforms for learning movement, jetpack and aiming.",
+ "width": 1800,
+ "height": 1000,
+ "theme": {
+  "skyTop": "#6fb1e4",
+  "skyBottom": "#d7f0c8",
+  "far": "#8db88b",
+  "near": "#5e9460",
+  "sun": "#fff2a0"
+ },
+ "platforms": [
+  {
+   "x": 0,
+   "y": 950,
+   "w": 1800,
+   "h": 50,
+   "kind": "earth"
+  },
+  {
+   "x": -40,
+   "y": 0,
+   "w": 40,
+   "h": 1000,
+   "kind": "stone"
+  },
+  {
+   "x": 1800,
+   "y": 0,
+   "w": 40,
+   "h": 1000,
+   "kind": "stone"
+  },
+  {
+   "x": 0,
+   "y": -40,
+   "w": 1800,
+   "h": 40,
+   "kind": "stone"
+  },
+  {
+   "x": 200,
+   "y": 820,
+   "w": 280,
+   "h": 24,
+   "kind": "earth"
+  },
+  {
+   "x": 1320,
+   "y": 820,
+   "w": 280,
+   "h": 24,
+   "kind": "earth"
+  },
+  {
+   "x": 760,
+   "y": 700,
+   "w": 280,
+   "h": 24,
+   "kind": "earth"
+  },
+  {
+   "x": 300,
+   "y": 560,
+   "w": 240,
+   "h": 24,
+   "kind": "earth"
+  },
+  {
+   "x": 1260,
+   "y": 560,
+   "w": 240,
+   "h": 24,
+   "kind": "earth"
+  },
+  {
+   "x": 760,
+   "y": 430,
+   "w": 280,
+   "h": 24,
+   "kind": "earth"
+  },
+  {
+   "x": 560,
+   "y": 890,
+   "w": 60,
+   "h": 60,
+   "kind": "stone"
+  },
+  {
+   "x": 1180,
+   "y": 890,
+   "w": 60,
+   "h": 60,
+   "kind": "stone"
+  }
+ ],
+ "spawns": [
+  {
+   "x": 150,
+   "y": 927
+  },
+  {
+   "x": 900,
+   "y": 927
+  },
+  {
+   "x": 1650,
+   "y": 927
+  },
+  {
+   "x": 340,
+   "y": 797
+  },
+  {
+   "x": 1460,
+   "y": 797
+  },
+  {
+   "x": 900,
+   "y": 677
+  },
+  {
+   "x": 420,
+   "y": 537
+  },
+  {
+   "x": 1380,
+   "y": 537
+  },
+  {
+   "x": 900,
+   "y": 407
+  }
+ ],
+ "pickups": [
+  {
+   "x": 980,
+   "y": 416,
+   "weapon": "sniper"
+  },
+  {
+   "x": 980,
+   "y": 686,
+   "weapon": "rocket"
+  },
+  {
+   "x": 420,
+   "y": 806,
+   "weapon": "shotgun"
+  },
+  {
+   "x": 1540,
+   "y": 806,
+   "weapon": "smg"
+  },
+  {
+   "x": 500,
+   "y": 546,
+   "weapon": "smg"
+  },
+  {
+   "x": 1460,
+   "y": 546,
+   "weapon": "shotgun"
+  }
+ ],
+ "decor": [
+  {
+   "kind": "tree",
+   "x": 100,
+   "y": 950,
+   "scale": 1.1
+  },
+  {
+   "kind": "bush",
+   "x": 420,
+   "y": 950,
+   "scale": 1.0
+  },
+  {
+   "kind": "tree",
+   "x": 1700,
+   "y": 950,
+   "scale": 1.2
+  },
+  {
+   "kind": "rock",
+   "x": 1000,
+   "y": 950,
+   "scale": 1.0
+  },
+  {
+   "kind": "bush",
+   "x": 1350,
+   "y": 950,
+   "scale": 1.0
+  }
+ ]
+}

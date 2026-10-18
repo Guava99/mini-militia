@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 10" width="8" height="10">
+  <defs>
+    <radialGradient id="body" cx="0.35" cy="0.3" r="0.9">
+      <stop offset="0" stop-color="#7d8f5f"/>
+      <stop offset="0.6" stop-color="#46563a"/>
+      <stop offset="1" stop-color="#1d2418"/>
+    </radialGradient>
+  </defs>
+  <!-- spoon lever and pin ring -->
+  <path d="M5.4 1.6 L7 1.2 L7.2 5.6 L5.6 5.4 Z" fill="#8b929d" stroke="#1a1d22" stroke-width="0.2"/>
+  <circle cx="2" cy="1" r="1" fill="none" stroke="#b6bcc6" stroke-width="0.35"/>
+  <!-- fuse head -->
+  <rect x="3" y="0.6" width="2.4" height="1.8" rx="0.4" fill="#3a3f47" stroke="#14161a" stroke-width="0.2"/>
+  <!-- body with ribbing -->
+  <ellipse cx="4" cy="6" rx="3.1" ry="3.7" fill="url(#body)" stroke="#12160e" stroke-width="0.25"/>
+  <path d="M1.2 4.8 C3 5.4 5 5.4 6.8 4.8 M0.9 6.2 C3 6.9 5 6.9 7.1 6.2 M1.2 7.6 C3 8.2 5 8.2 6.8 7.6" fill="none" stroke="#1d2418" stroke-width="0.25" opacity="0.7"/>
+  <path d="M4 2.4 L4 9.6" stroke="#1d2418" stroke-width="0.25" opacity="0.6"/>
+  <path d="M2.4 3.8 C2.8 3.4 3.4 3.2 3.8 3.3" fill="none" stroke="#c6d4a6" stroke-width="0.3" opacity="0.6"/>
+</svg>

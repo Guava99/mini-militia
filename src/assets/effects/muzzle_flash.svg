@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 14" width="20" height="14">
+  <defs>
+    <radialGradient id="core" cx="0.2" cy="0.5" r="0.9">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.3" stop-color="#fff3b0"/>
+      <stop offset="0.65" stop-color="#ffb347"/>
+      <stop offset="1" stop-color="#ff6a1a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <!-- star burst, pointing right, origin at the muzzle (left-centre) -->
+  <path d="M0 7 L5 3.6 L4 0.8 L8.6 3.4 L12.4 0 L12.6 4.4 L19.8 7 L12.6 9.6 L12.4 14 L8.6 10.6 L4 13.2 L5 10.4 Z" fill="url(#core)"/>
+  <path d="M0 7 L7 5.6 L16 7 L7 8.4 Z" fill="#ffffff" opacity="0.9"/>
+</svg>
