@@ -4,6 +4,7 @@ services:
   - type: web
     name: boomjet
     runtime: node
+    region: singapore # closest free region for players in India; cannot be changed later without recreating the service
     plan: free # sleeps after ~15 minutes without players; the first visit afterwards takes ~30 s to wake it
     buildCommand: npm ci --include=dev && npm run build
     startCommand: npx tsx server/index.ts
