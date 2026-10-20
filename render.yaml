@@ -1,0 +1,13 @@
+# Render "blueprint": one free web service that serves the game page AND the multiplayer WebSocket.
+# Deploy: push this repo to GitHub, then on render.com choose New > Blueprint and pick the repo.
+services:
+  - type: web
+    name: boomjet
+    runtime: node
+    plan: free # sleeps after ~15 minutes without players; the first visit afterwards takes ~30 s to wake it
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npx tsx server/index.ts
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: 22

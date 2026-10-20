@@ -8,6 +8,9 @@ type KeyValueStore = Pick<Storage, 'getItem' | 'setItem'>;
 export const defaultServerUrl = () => {
   const q = typeof location !== 'undefined' ? new URLSearchParams(location.search).get('server') : null;
   if (q) return q;
+  // the phone app is built with VITE_SERVER_URL (see .env.app): its page comes from the device, not the game server
+  const baked = import.meta.env?.VITE_SERVER_URL as string | undefined;
+  if (baked) return baked;
   if (typeof location === 'undefined' || !location.hostname) return `ws://localhost:${DEFAULT_PORT}`;
   // `npm run dev` serves the page from Vite, so the game server is on its own port. In production the
   // game server serves the page itself, so the WebSocket lives on the same origin.

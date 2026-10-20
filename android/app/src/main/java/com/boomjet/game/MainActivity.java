@@ -1,4 +1,4 @@
-package com.example.minimilitiaclone;
+package com.boomjet.game;
 
 import com.getcapacitor.BridgeActivity;
 
