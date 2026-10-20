@@ -1,0 +1,231 @@
+/* In-game HUD layout. Each block is pinned to an edge of the safe area. */
+
+.hud { z-index: 5; transition: opacity 0.15s; }
+.hud.is-paused { opacity: 0.25; }
+
+/* ---------- top left: minimap + vitals ---------- */
+.hud-tl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(var(--u) * 13);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-sm);
+}
+.hud-minimap { position: relative; width: 100%; max-height: calc(var(--u) * 8); overflow: hidden; }
+.hud-minimap canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hud-vitals {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: var(--sp-sm) var(--sp-md);
+}
+.hud-heart { width: calc(var(--u) * 1.7); flex: none; fill: var(--magenta); display: flex; }
+.hud-heart svg { width: 100%; height: auto; }
+.hud-meters { flex: 1; display: flex; flex-direction: column; gap: var(--sp-xs); }
+.hud-meter {
+  position: relative;
+  height: calc(var(--u) * 0.85);
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.hud-meter.is-fuel { height: calc(var(--u) * 0.5); }
+.hud-fill {
+  position: absolute;
+  inset: 0;
+  transform-origin: left center;
+  transition: transform 0.12s linear;
+  border-radius: inherit;
+}
+.is-hp .hud-fill { background: linear-gradient(90deg, var(--hp), var(--hp-high)); }
+.is-hp::after { /* segment notches, like the concept: a gap every 20% */
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(90deg, transparent 0 calc(20% - 2px), var(--ink) calc(20% - 2px) 20%);
+  opacity: 0.7;
+}
+.is-fuel .hud-fill { background: var(--cyan); }
+.hud-vitals.is-low { border-color: var(--bad); animation: hud-low 0.8s ease-in-out infinite alternate; }
+@keyframes hud-low { to { box-shadow: 0 0 calc(var(--u) * 1) rgba(255, 90, 95, 0.55); } }
+
+/* ---------- top centre: score bar ---------- */
+.hud-score {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  min-width: calc(var(--u) * 26);
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r-md);
+  overflow: hidden;
+}
+.hud-side {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-md);
+  padding: var(--sp-xs) var(--sp-lg);
+  min-width: 0;
+}
+.hud-side.is-empty { visibility: hidden; }
+.hud-side.is-you { background: linear-gradient(90deg, var(--cyan-soft), transparent); }
+.hud-side.is-you .ui-label { color: var(--cyan); }
+.hud-side.is-rival { flex-direction: row-reverse; background: linear-gradient(270deg, var(--magenta-soft), transparent); }
+.hud-side.is-rival .ui-label { color: var(--magenta); }
+.hud-rival-name { max-width: 7em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hud-side-num { font-size: var(--fs-lg); }
+.hud-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-xs) var(--sp-md);
+  border-left: 1px solid var(--panel-border);
+  border-right: 1px solid var(--panel-border);
+}
+.hud-rank { font-size: var(--fs-md); line-height: 1; }
+.hud-mid .ui-label { color: var(--text-dim); font-size: calc(var(--u) * 0.65); }
+
+/* ---------- top right: connection + pause ---------- */
+.hud-tr {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--sp-sm);
+}
+.hud-net {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-lg);
+  font-size: var(--fs-sm);
+}
+.hud-ping { display: flex; align-items: center; gap: var(--sp-xs); }
+.hud-bars { display: flex; align-items: flex-end; gap: 2px; height: 0.8em; }
+.hud-bars b { width: 3px; background: currentColor; border-radius: 1px; }
+.hud-bars b:nth-child(1) { height: 35%; }
+.hud-bars b:nth-child(2) { height: 65%; }
+.hud-bars b:nth-child(3) { height: 100%; }
+.hud-ping[data-q='warn'] .hud-bars b:nth-child(3),
+.hud-ping[data-q='bad'] .hud-bars b:nth-child(n + 2) { opacity: 0.25; }
+.hud-ping[data-q='good'] { color: var(--good); }
+.hud-ping[data-q='warn'] { color: var(--warn); }
+.hud-ping[data-q='bad'] { color: var(--bad); }
+.hud-fps { color: var(--text-dim); }
+.hud-pause {
+  width: calc(var(--u) * 2.6);
+  height: calc(var(--u) * 2.6);
+  border-radius: var(--r-pill);
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  position: relative;
+}
+.hud-pause::before, .hud-pause::after { /* the two bars of a pause icon */
+  content: '';
+  position: absolute;
+  top: 32%;
+  height: 36%;
+  width: 12%;
+  border-radius: 2px;
+  background: var(--text);
+}
+.hud-pause::before { left: 36%; }
+.hud-pause::after { right: 36%; }
+
+/* ---------- bottom centre: weapon + ammo ---------- */
+.hud-gun {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-lg);
+  padding: var(--sp-sm) var(--sp-xl) calc(var(--sp-sm) + var(--u) * 0.4);
+  min-width: calc(var(--u) * 20);
+  overflow: hidden;
+}
+.hud-gun-icon { height: calc(var(--u) * 2); width: auto; filter: drop-shadow(0 0 4px var(--cyan-soft)); }
+.hud-gun-main { flex: 1; display: flex; flex-direction: column; align-items: center; }
+.hud-gun-count { display: flex; align-items: baseline; gap: var(--sp-sm); }
+.hud-gun-ammo { font-size: var(--fs-lg); line-height: 1; }
+.hud-gun-mag { color: var(--text-dim); }
+.hud-gun-name { color: var(--cyan); }
+.hud-gun-side { display: flex; flex-direction: column; align-items: flex-end; gap: var(--sp-xs); font-size: var(--fs-xs); color: var(--text-dim); }
+.hud-gun-alt { display: flex; align-items: center; gap: var(--sp-xs); opacity: 0.6; }
+.hud-gun-alt img { height: calc(var(--u) * 1.1); width: auto; }
+.hud-gun-bar {
+  position: absolute;
+  left: var(--sp-xl);
+  right: var(--sp-xl);
+  bottom: var(--sp-xs);
+  height: calc(var(--u) * 0.25);
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.hud-gun-bar .hud-fill { background: var(--cyan); transition: none; }
+.hud-gun[data-state='low'] .hud-gun-ammo { color: var(--amber); }
+.hud-gun[data-state='empty'] .hud-gun-ammo { color: var(--bad); }
+.hud-gun[data-state='reload'] .hud-gun-ammo { opacity: 0.4; }
+.hud-gun[data-state='reload'] .hud-gun-bar .hud-fill { background: var(--amber); }
+.hud-gun[data-state='reload'] .hud-gun-name::after { content: ' · reloading'; color: var(--amber); }
+
+/* ---------- kill feed ---------- */
+.hud-feed { display: flex; flex-direction: column; align-items: flex-end; gap: var(--sp-xs); }
+.hud-feed-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  padding: var(--sp-xs) var(--sp-md);
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r-sm);
+  animation: hud-feed-in 0.2s ease-out, hud-feed-out 0.4s ease-in 4.6s forwards; /* 4.6 + 0.4 = FEED_MS */
+}
+.hud-feed-row.is-mine { border-color: var(--amber); background: linear-gradient(90deg, var(--panel), var(--amber-soft)); }
+.hud-feed-name { max-width: 8em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hud-feed-name.is-you { color: var(--amber); }
+.hud-arrow { /* a short arrow: a line plus a rotated corner */
+  position: relative;
+  width: 1.3em;
+  height: 2px;
+  background: var(--text);
+}
+.hud-arrow::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 0.4em;
+  height: 0.4em;
+  border-top: 2px solid var(--text);
+  border-right: 2px solid var(--text);
+  transform: translateY(-50%) rotate(45deg);
+}
+.hud-cross { /* self-kill: a red cross */
+  position: relative;
+  width: 0.8em;
+  height: 0.8em;
+}
+.hud-cross::before, .hud-cross::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: var(--bad);
+}
+.hud-cross::before { transform: rotate(45deg); }
+.hud-cross::after { transform: rotate(-45deg); }
+@keyframes hud-feed-in { from { opacity: 0; transform: translateX(1em); } }
+@keyframes hud-feed-out { to { opacity: 0; } }

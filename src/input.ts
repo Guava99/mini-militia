@@ -30,7 +30,7 @@ export class InputReader {
       const aiming = Math.hypot(t.aimX, t.aimY) > 0.1;
       i.left = t.moveX < -0.25;
       i.right = t.moveX > 0.25;
-      i.thrust = t.moveY < -0.5;
+      i.thrust = t.moveY < -0.5 || t.jetHeld; // push the move stick up, or hold the jetpack button
       i.aim = aiming ? Math.atan2(t.aimY, t.aimX) : me.aim;
       i.fire = t.firing;
       i.reload = t.consumeReload();

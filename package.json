@@ -1,13 +1,14 @@
 {
-  "name": "mini-militia-clone",
+  "name": "boomjet",
   "private": true,
   "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "build:app": "tsc --noEmit && vite build --mode app",
     "preview": "vite preview",
-    "cap:sync": "npm run build && cap sync",
+    "cap:sync": "npm run build:app && cap sync",
     "cap:android": "npm run cap:sync && cap open android",
     "cap:ios": "npm run cap:sync && cap open ios",
     "test": "vitest run",
@@ -21,6 +22,7 @@
     "@capacitor/cli": "^8.5.3",
     "@capacitor/core": "^8.5.3",
     "@capacitor/ios": "^8.5.3",
+    "@fontsource/poppins": "^5.3.0",
     "@fontsource/rajdhani": "^5.3.0",
     "phaser": "3.80.1",
     "ws": "^8.22.0"

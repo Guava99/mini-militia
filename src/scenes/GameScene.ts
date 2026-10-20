@@ -3,17 +3,17 @@ import { sfx } from '../audio';
 import { CameraSplit } from '../camera';
 import { InputReader } from '../input';
 import { PauseMenu } from '../ui';
+import { Hud } from '../ui/hud';
 import { Fx, Renderer, buildWorld } from '../render';
 import { getMap, MAPS } from '../../shared/maps';
 import type { MapDef } from '../../shared/mapTypes';
-import { Sim, TICK } from '../../shared/sim/sim';
+import { MAX_FUEL, Sim, TICK } from '../../shared/sim/sim';
 import type { FighterState } from '../../shared/sim/sim';
-import { WEAPONS } from '../../shared/sim/weapons';
 
 // Offline play against bots. Only draws and reads input: all rules live in shared/sim.
 
 const BOT_COUNT = 3;
-const BOT_COLORS = [0xef4444, 0x22c55e, 0xeab308, 0xa855f7];
+const BOT_COLORS = [0xff3d9a, 0xffb02e, 0x8a6cff, 0x6dff8a];
 
 export class GameScene extends Phaser.Scene {
   private map!: MapDef;
@@ -21,7 +21,7 @@ export class GameScene extends Phaser.Scene {
   private player!: FighterState;
   private stage!: Renderer;
   private split!: CameraSplit;
-  private hud!: Phaser.GameObjects.Text;
+  private hud!: Hud;
   private banner!: Phaser.GameObjects.Text;
   private input2!: InputReader;
   private pause!: PauseMenu;
@@ -43,7 +43,7 @@ export class GameScene extends Phaser.Scene {
     this.map = wanted ? getMap(wanted) : MAPS[idx % MAPS.length];
 
     this.sim = new Sim(this.map, { seed: (Math.random() * 2 ** 31) | 0 });
-    this.player = this.sim.addFighter('You', false, 0x3b82f6);
+    this.player = this.sim.addFighter('You', false, 0x2de2e6);
     for (let i = 0; i < BOT_COUNT; i++) this.sim.addFighter(`Bot ${i + 1}`, true, BOT_COLORS[i % BOT_COLORS.length]);
 
     buildWorld(this, this.map);
@@ -51,11 +51,11 @@ export class GameScene extends Phaser.Scene {
     this.cameras.main.startFollow(this.camTarget, true, 0.12, 0.12);
     this.stage = new Renderer(this, this.fx);
 
-    this.hud = this.add.text(16, 12, '', { fontFamily: 'monospace', fontSize: '20px', color: '#fff', stroke: '#000', strokeThickness: 4 }).setScrollFactor(0).setDepth(30);
     this.banner = this.add.text(640, 300, '', { fontFamily: 'monospace', fontSize: '48px', color: '#fff', stroke: '#000', strokeThickness: 6, align: 'center' }).setOrigin(0.5).setScrollFactor(0).setDepth(30);
 
     this.input2 = new InputReader(this);
-    this.pause = new PauseMenu(this, { note: 'Offline match is frozen while paused', onLeave: () => this.scene.start('menu') });
+    this.pause = new PauseMenu(this, { note: 'Offline match is frozen while paused', onLeave: () => this.scene.start('menu'), onToggle: (open) => { this.hud.setPaused(open); this.input2.touch.setSuspended(open); } });
+    this.hud = new Hud(this, { map: this.map, onPause: () => this.pause.toggle() });
     this.input.on('pointerdown', () => {
       if (!this.sim.over) return;
       this.registry.set('mapIndex', (MAPS.indexOf(this.map) + 1) % MAPS.length);
@@ -113,7 +113,12 @@ export class GameScene extends Phaser.Scene {
           break;
         case 'spark': this.fx.spark(e.x, e.y, e.color); break;
         case 'hit': sfx.hit(); break;
-        case 'die': sfx.die(); break;
+        case 'die': {
+          sfx.die();
+          const victim = this.sim.getFighter(e.id);
+          if (victim) this.hud.kill(victim, this.sim.getFighter(e.by), this.player.id);
+          break;
+        }
         case 'reload': if (e.id === this.player.id) sfx.reload(); break;
         case 'pickup': if (e.id === this.player.id) sfx.pickup(); break;
         default: break;
@@ -123,11 +128,9 @@ export class GameScene extends Phaser.Scene {
 
   private updateHud() {
     const p = this.player;
-    const w = WEAPONS[p.weapon];
-    const ammo = p.reloadUntil ? `RELOADING ${Math.max(0, p.reloadUntil - this.sim.time).toFixed(1)}s` : `${p.ammo}/${w.mag}`;
-    const alt = p.altWeapon ? `  Alt: ${WEAPONS[p.altWeapon].name} ${p.altAmmo}` : '';
-    const board = [...this.sim.fighters].sort((a, b) => b.kills - a.kills).map((f) => `${f.name.padEnd(6)} ${f.kills}`).join('\n');
-    this.hud.setText(`HP ${Math.max(0, Math.ceil(p.hp))}  FUEL ${Math.ceil(p.fuel)}\n${w.name}  ${ammo}\nGrenades ${p.grenades}${alt}\n\n${this.map.name}\nFirst to ${this.sim.killLimit}\n${board}`);
+    this.input2.touch.setStatus(p.fuel / MAX_FUEL, p.grenades);
+    const all = this.sim.fighters;
+    this.hud.update({ ping: null, youId: p.id, fighters: all, killLimit: this.sim.killLimit, dots: all, me: p, time: this.sim.time });
     if (this.sim.over) {
       const win = this.sim.getFighter(this.sim.winner!);
       this.banner.setText(`${win?.name ?? '?'} wins!\nClick to play again`);

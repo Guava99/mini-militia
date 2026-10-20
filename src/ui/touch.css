@@ -1,0 +1,100 @@
+/* Phone controls. Hidden until the device is known to be touch. Positions are in units (--u), so the
+   layout keeps its proportions on any phone; the bottom row is: move stick, ammo panel, reload, jetpack, aim stick. */
+
+.touch { z-index: 6; display: none; }
+.touch.is-on { display: block; }
+.touch.is-paused { opacity: 0.2; }
+
+/* ---------- sticks ---------- */
+.touch-stick {
+  position: absolute;
+  bottom: var(--sp-md);
+  width: calc(var(--u) * 10);
+  height: calc(var(--u) * 10);
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: rgba(12, 10, 31, 0.25);
+  transition: transform 0.12s ease-out; /* glides home after you let go */
+}
+.touch-stick::before { /* the dashed inner ring from the concept */
+  content: '';
+  position: absolute;
+  inset: 20%;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 255, 255, 0.3);
+}
+.touch-stick.is-active { transition: none; border-color: rgba(255, 255, 255, 0.7); }
+.touch-stick.is-move { left: calc(var(--u) * 1.5); }
+.touch-stick.is-aim { right: calc(var(--u) * 6); border-color: rgba(255, 61, 154, 0.55); }
+.touch-stick.is-aim.is-active { border-color: var(--magenta); }
+.touch-knob {
+  position: absolute;
+  inset: 29%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+.is-aim .touch-knob { background: #ff5a6e; }
+
+/* ---------- buttons ---------- */
+.touch-btn {
+  position: absolute;
+  width: max(48px, calc(var(--u) * 4.6)); /* never smaller than a comfortable thumb target */
+  height: max(48px, calc(var(--u) * 4.6));
+  border-radius: 50%;
+  background: var(--panel);
+  border: 3px solid var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.06s;
+}
+.touch-btn.is-down { transform: scale(0.9); filter: brightness(1.3); }
+.touch-icon { width: 46%; height: 46%; display: flex; position: relative; z-index: 1; }
+.touch-icon svg { width: 100%; height: 100%; }
+
+.touch-btn.is-reload { right: calc(var(--u) * 24.2); bottom: var(--sp-md); border-color: var(--good); color: var(--good); }
+.touch-btn.is-swap { right: 0; bottom: calc(var(--u) * 18); border-color: var(--violet); color: var(--text); }
+.touch-btn.is-nade { right: 0; bottom: calc(var(--u) * 12.5); border-color: var(--amber); color: var(--text); }
+.touch-btn.is-nade.is-empty { opacity: 0.4; }
+.touch-count {
+  position: absolute;
+  top: 100%;
+  margin-top: 2px;
+  font-size: var(--fs-xs);
+  font-weight: 800;
+}
+
+/* jetpack: the ring around it is the fuel gauge (--fuel is 0..1, set from code) */
+.touch-btn.is-jet {
+  right: calc(var(--u) * 17);
+  bottom: calc(var(--u) * 1.5);
+  width: calc(var(--u) * 6.4);
+  height: calc(var(--u) * 6.4);
+  min-width: 64px;
+  min-height: 64px;
+  border: none;
+  background: conic-gradient(var(--cyan) calc(var(--fuel, 1) * 1turn), rgba(255, 255, 255, 0.14) 0);
+  color: var(--text);
+}
+.touch-btn.is-jet::before { /* inner disc, leaving the conic gradient visible only as a ring */
+  content: '';
+  position: absolute;
+  inset: 9%;
+  border-radius: 50%;
+  background: var(--ink);
+}
+.touch-jet-label {
+  position: absolute;
+  top: 100%;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---------- HUD adjustments while touch controls are on ---------- */
+/* The ammo panel moves next to the move stick so the right-hand buttons fit even on 16:9 phones. */
+.touch-on .hud-gun { left: calc(var(--u) * 13); transform: none; min-width: calc(var(--u) * 15); padding-left: var(--sp-lg); padding-right: var(--sp-lg); }
+.touch-on .hud-gun-nades { display: none; } /* the grenade button shows the count instead */
+.touch-on .hud-feed-row:nth-child(n + 4) { display: none; } /* 3 rows, so the feed clears the swap button */

@@ -1,0 +1,54 @@
+/* Shared base for every HTML layer drawn over the game canvas. Colours and sizes come from tokens.ts. */
+
+.ui-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none; /* only real controls opt back in, so the canvas below still gets mouse and touch */
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  color: var(--text);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  line-height: 1.15;
+}
+.ui-layer *, .ui-layer *::before, .ui-layer *::after { box-sizing: border-box; }
+.ui-layer [hidden] { display: none !important; } /* otherwise display: flex would override the hidden attribute */
+
+/* The part of the screen that is safe from notches, rounded corners and the gesture bar. */
+.ui-safe {
+  position: absolute;
+  top: max(var(--sp-md), env(safe-area-inset-top));
+  right: max(var(--sp-lg), env(safe-area-inset-right));
+  bottom: max(var(--sp-md), env(safe-area-inset-bottom));
+  left: max(var(--sp-lg), env(safe-area-inset-left));
+}
+
+.ui-panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--r-md);
+}
+
+.ui-num {
+  font-weight: 800;
+  font-style: italic;
+  font-variant-numeric: tabular-nums;
+}
+
+.ui-label {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.ui-btn {
+  pointer-events: auto;
+  touch-action: none;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+}

@@ -74,11 +74,7 @@ export class PauseMenu {
     this.refresh();
     this.items.forEach((i) => (i as Phaser.GameObjects.Components.Visible & Phaser.GameObjects.GameObject).setVisible?.(false));
     s.input.keyboard!.on('keydown-ESC', () => this.toggle());
-    // on-screen button for phones (no Escape key); the touch sticks ignore this spot
-    const pauseBtn = s.add
-      .text(640, 24, 'II', { fontFamily: 'monospace', fontSize: '22px', color: '#fff', backgroundColor: '#00000088', padding: { x: 14, y: 4 } })
-      .setOrigin(0.5).setScrollFactor(0).setDepth(99).setInteractive({ useHandCursor: true });
-    pauseBtn.on('pointerup', () => { if (!this.open) this.toggle(); });
+    // the on-screen pause button for phones lives in the HUD (src/ui/hud.ts)
   }
 
   toggle() {

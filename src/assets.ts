@@ -8,6 +8,11 @@ export const ART_SCALE = 4;
 
 export const artKeys = (): string[] => Object.keys(urls).map((p) => p.split('/').pop()!.replace('.svg', ''));
 
+/** URL of an art file by key (e.g. 'smg'), for HTML <img> use; undefined if there is no such art. */
+export function artUrl(key: string): string | undefined {
+  return Object.entries(urls).find(([p]) => p.endsWith(`/${key}.svg`))?.[1];
+}
+
 export function queueArt(scene: Phaser.Scene) {
   for (const [path, url] of Object.entries(urls)) {
     const key = path.split('/').pop()!.replace('.svg', '');

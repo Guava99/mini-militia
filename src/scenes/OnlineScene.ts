@@ -3,6 +3,7 @@ import { sfx } from '../audio';
 import { CameraSplit } from '../camera';
 import { InputReader } from '../input';
 import { PauseMenu } from '../ui';
+import { Hud } from '../ui/hud';
 import { NetClient, defaultServerUrl } from '../net/client';
 import { Predictor } from '../net/predictor';
 import type { Snap } from '../net/predictor';
@@ -12,8 +13,8 @@ import { Fx, Renderer, buildWorld } from '../render';
 import { getMap, MAPS } from '../../shared/maps';
 import type { MapDef } from '../../shared/mapTypes';
 import type { JoinedInfo, ServerMsg } from '../../shared/net/protocol';
-import { TICK } from '../../shared/sim/sim';
-import { WEAPONS } from '../../shared/sim/weapons';
+import { MAX_FUEL, TICK } from '../../shared/sim/sim';
+import type { FighterState } from '../../shared/sim/sim';
 
 interface StartData {
   mode?: 'quick' | 'create' | 'join';
@@ -38,7 +39,8 @@ export class OnlineScene extends Phaser.Scene {
   private fx = new Fx();
   private stage!: Renderer;
   private split: CameraSplit | null = null;
-  private hud!: Phaser.GameObjects.Text;
+  private hud!: Hud;
+  private pause!: PauseMenu;
   private banner!: Phaser.GameObjects.Text;
   private reader!: InputReader;
   private camTarget!: Phaser.GameObjects.Rectangle;
@@ -120,9 +122,9 @@ export class OnlineScene extends Phaser.Scene {
     this.camTarget = this.add.rectangle(this.map.width / 2, this.map.height / 2, 2, 2, 0, 0);
     this.cameras.main.startFollow(this.camTarget, true, 0.12, 0.12);
     this.stage = new Renderer(this, this.fx);
-    this.hud = this.add.text(16, 12, '', { fontFamily: 'monospace', fontSize: '20px', color: '#fff', stroke: '#000', strokeThickness: 4 }).setScrollFactor(0).setDepth(30);
     this.reader = new InputReader(this);
-    new PauseMenu(this, { title: `Room ${info.code}`, note: 'The match keeps running while this menu is open', onLeave: () => this.leave() });
+    this.pause = new PauseMenu(this, { title: `Room ${info.code}`, note: 'The match keeps running while this menu is open', onLeave: () => this.leave(), onToggle: (open) => { this.hud.setPaused(open); this.reader.touch.setSuspended(open); } });
+    this.hud = new Hud(this, { map: this.map, onPause: () => this.pause.toggle() });
 
     this.split = new CameraSplit(this); // world zoomed, interface not
     this.listen();
@@ -169,7 +171,7 @@ export class OnlineScene extends Phaser.Scene {
     const L = this.lobby;
     L.host = m.youAreHost;
     L.mapId = m.mapId;
-    const rows = m.players.map((p) => `${p.host ? '★ ' : '  '}${p.name}${p.connected ? '' : '  (reconnecting...)'}`);
+    const rows = m.players.map((p) => `${p.host ? 'â˜… ' : '  '}${p.name}${p.connected ? '' : '  (reconnecting...)'}`);
     L.players?.setText(rows.length ? `Players (${rows.length})\n\n${rows.join('\n')}` : 'Waiting for players...');
     const mapName = getMap(m.mapId).name;
     L.map?.setText(L.host ? `Map: ${mapName}  (click to change)` : `Map: ${mapName}`);
@@ -235,7 +237,12 @@ export class OnlineScene extends Phaser.Scene {
           break;
         case 'spark': this.fx.spark(e.x, e.y, e.color); break;
         case 'hit': sfx.hit(); break;
-        case 'die': sfx.die(); break;
+        case 'die': {
+          sfx.die();
+          const victim = snap.fighters.find((f) => f.id === e.id);
+          if (victim) this.hud?.kill(victim, snap.fighters.find((f) => f.id === e.by), you);
+          break;
+        }
         case 'reload': if (e.id === you) sfx.reload(); break;
         case 'pickup': if (e.id === you) sfx.pickup(); break;
         default: break;
@@ -273,11 +280,12 @@ export class OnlineScene extends Phaser.Scene {
     const now = performance.now();
     const local = { ...pred.me, x: pred.me.x + pred.corr.x, y: pred.me.y + pred.corr.y };
     const remote = this.buffer.fighters(now - INTERP_DELAY_MS).filter((f) => f.id !== this.info.you);
+    const shown = [...remote, local];
     this.camTarget.setPosition(local.x, local.y);
     this.stage.frame(
       {
         time: latest.time + (now - this.buffer.latestTime) / 1000,
-        fighters: [...remote, local],
+        fighters: shown,
         bullets: this.buffer.bullets(now),
         grenades: latest.grenades,
         crates: this.map.pickups.map((p, i) => ({ x: p.x, y: p.y, active: latest.crates[i]?.active ?? false })),
@@ -286,19 +294,14 @@ export class OnlineScene extends Phaser.Scene {
       this.reader.crosshair(),
       delta / 1000,
     );
-    this.updateHud(latest, local.hp);
+    this.updateHud(latest, shown);
   }
 
-  private updateHud(latest: Snap, hp: number) {
+  private updateHud(latest: Snap, shown: readonly FighterState[]) {
     const p = this.pred!.me;
-    const w = WEAPONS[p.weapon];
-    const ammo = p.reloadUntil ? `RELOADING ${Math.max(0, p.reloadUntil - this.pred!.sim.time).toFixed(1)}s` : `${p.ammo}/${w.mag}`;
-    const alt = p.altWeapon ? `  Alt: ${WEAPONS[p.altWeapon].name} ${p.altAmmo}` : '';
-    const board = [...latest.fighters].sort((a, b) => b.kills - a.kills).map((f) => `${(f.id === this.info.you ? '> ' : '  ') + f.name.padEnd(8)} ${f.kills}`).join('\n');
-    this.hud.setText(
-      `HP ${Math.max(0, Math.ceil(hp))}  FUEL ${Math.ceil(p.fuel)}\n${w.name}  ${ammo}\nGrenades ${p.grenades}${alt}\n\n` +
-      `Room ${this.info.code} - ${this.map.name}\nFirst to ${this.info.killLimit}   ping ${Math.round(this.net.rtt)} ms\n${board}`,
-    );
+    this.reader.touch.setStatus(p.fuel / MAX_FUEL, p.grenades);
+    // scores come from the server's latest snapshot; your own state and positions from what is on screen right now
+    this.hud.update({ ping: this.net.rtt, youId: this.info.you, fighters: latest.fighters, killLimit: this.info.killLimit, dots: shown, me: p, time: this.pred!.sim.time });
     if (this.net.status !== 'open') this.banner.setText('Connection lost - reconnecting...');
     else if (latest.over) {
       const win = latest.fighters.find((f) => f.id === latest.winner);
