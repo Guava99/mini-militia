@@ -1,23 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 5 9.4" width="5" height="9.4">
   <defs>
-    <linearGradient id="sleeve" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#2f3526"/>
-      <stop offset="0.5" stop-color="#4f5a3c"/>
-      <stop offset="1" stop-color="#6a7552"/>
+    <linearGradient id="limb" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b4b6cc"/>
+      <stop offset="0.45" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#c3c5d8"/>
     </linearGradient>
-    <radialGradient id="pad" cx="0.4" cy="0.35" r="0.8">
-      <stop offset="0" stop-color="#5b6446"/>
-      <stop offset="1" stop-color="#232819"/>
-    </radialGradient>
   </defs>
-  <!-- sleeve -->
-  <path d="M0.7 0.5 C0.6 0.1 4.4 0.1 4.3 0.5 L4.6 7.6 C4.6 8.6 0.4 8.6 0.4 7.6 Z" fill="url(#sleeve)" stroke="#1d2018" stroke-width="0.2"/>
-  <!-- shoulder cap shade -->
-  <path d="M0.7 0.5 C0.6 0.1 4.4 0.1 4.3 0.5 L4.4 2 C3 2.6 2 2.6 0.6 2 Z" fill="#14150f" opacity="0.28"/>
-  <!-- folds -->
-  <path d="M0.8 3.2 C2 3.7 3.2 3.7 4.4 3.2" fill="none" stroke="#1d2018" stroke-width="0.22" opacity="0.4"/>
-  <path d="M0.7 5 C2 5.5 3.3 5.5 4.5 5" fill="none" stroke="#1d2018" stroke-width="0.22" opacity="0.35"/>
-  <!-- elbow pad -->
-  <ellipse cx="2.5" cy="7.8" rx="1.95" ry="1.25" fill="url(#pad)" stroke="#14150f" stroke-width="0.2"/>
-  <path d="M1.4 7.4 C2 7 3 7 3.6 7.4" fill="none" stroke="#8b966d" stroke-width="0.2" opacity="0.6"/>
+  <rect x="0.9" y="0.3" width="3.2" height="8.3" rx="1.6" fill="url(#limb)" stroke="#2a2c4a" stroke-width="0.3"/>
+  <rect x="1.1" y="3.8" width="2.8" height="0.9" fill="#ffffff" opacity="0.4"/>
+  <circle cx="2.5" cy="7.9" r="1.45" fill="#3e4062" stroke="#14152b" stroke-width="0.25"/>
 </svg>

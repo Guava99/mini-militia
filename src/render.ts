@@ -1,22 +1,12 @@
 import Phaser from 'phaser';
-import type { MapDef, PlatformKind } from '../shared/mapTypes';
+import type { MapDef } from '../shared/mapTypes';
 import { MAX_FUEL, MAX_HP } from '../shared/sim/sim';
 import { CharacterLayer } from './rig/soldier';
+import { buildScenery } from './scenery';
 import type { BulletState, FighterState, GrenadeState } from '../shared/sim/sim';
 
 // Everything that turns game state into pixels. Used by both the offline and online scenes.
 
-// [fill, stroke, cap] colours per platform material
-const KIND_COLORS: Record<PlatformKind, [number, number, number]> = {
-  earth: [0x7a5230, 0x3b2814, 0x4fa03a],
-  stone: [0x8a8f98, 0x4b5058, 0xa8adb5],
-  metal: [0x5a6572, 0x2b323a, 0x8c99a6],
-  snow: [0x7fa6cc, 0x456a8f, 0xffffff],
-  sand: [0xd9b26a, 0x8f6e33, 0xebcb8b],
-  bridge: [0x8a5a2b, 0x4a2f14, 0xb98147],
-};
-
-const hex = (c: string) => Phaser.Display.Color.HexStringToColor(c).color;
 export const shade = (c: number, f: number) => {
   const r = Math.min(255, Math.floor(((c >> 16) & 255) * f));
   const g = Math.min(255, Math.floor(((c >> 8) & 255) * f));
@@ -28,56 +18,7 @@ export const shade = (c: number, f: number) => {
 
 export function buildWorld(scene: Phaser.Scene, map: MapDef) {
   scene.cameras.main.setBounds(0, -40, map.width, map.height + 40);
-  drawBackground(scene, map);
-  drawStaticWorld(scene, map);
-}
-
-function drawBackground(scene: Phaser.Scene, map: MapDef) {
-  const t = map.theme;
-  const sky = scene.add.graphics().setDepth(-10).setScrollFactor(0);
-  sky.fillGradientStyle(hex(t.skyTop), hex(t.skyTop), hex(t.skyBottom), hex(t.skyBottom), 1).fillRect(0, 0, 1280, 720);
-  sky.fillStyle(hex(t.sun), 0.35).fillCircle(1000, 130, 80).fillStyle(hex(t.sun), 1).fillCircle(1000, 130, 42);
-  const far = scene.add.graphics().setDepth(-9).setScrollFactor(0.2);
-  far.fillStyle(hex(t.far));
-  for (let i = 0; i < 18; i++) far.fillTriangle(i * 260 - 120, 720, i * 260 + 130, 720, i * 260 + 5, 430 + (i % 4) * 40);
-  const near = scene.add.graphics().setDepth(-8).setScrollFactor(0.4);
-  near.fillStyle(hex(t.near));
-  for (let i = 0; i < 20; i++) near.fillCircle(i * 300, 800 + (i % 3) * 30, 260);
-  const clouds = scene.add.graphics().setDepth(-7).setScrollFactor(0.15);
-  clouds.fillStyle(0xffffff, 0.8);
-  for (let i = 0; i < 10; i++) {
-    const cx = i * 420 + 100;
-    const cy = 90 + (i % 3) * 60;
-    clouds.fillEllipse(cx, cy, 160, 50).fillEllipse(cx + 50, cy - 15, 100, 45);
-  }
-}
-
-function drawStaticWorld(scene: Phaser.Scene, map: MapDef) {
-  const g = scene.add.graphics().setDepth(1);
-  for (const d of map.decor) drawDecor(scene, d);
-  for (const { x, y, w, h, kind } of map.platforms) {
-    const [fill, stroke, cap] = KIND_COLORS[kind];
-    g.fillStyle(fill).fillRect(x, y, w, h);
-    g.fillStyle(cap).fillRect(x, y, w, Math.min(10, h / 2));
-    g.lineStyle(3, stroke).strokeRect(x, y, w, h);
-  }
-}
-
-function drawDecor(scene: Phaser.Scene, d: { kind: string; x: number; y: number; scale: number }) {
-  const g = scene.add.graphics({ x: d.x, y: d.y }).setDepth(0).setScale(d.scale);
-  switch (d.kind) {
-    case 'tree':
-      g.fillStyle(0x6b4423).fillRect(-6, -55, 12, 55).fillStyle(0x2e7d32).fillCircle(0, -78, 30).fillCircle(-22, -58, 22).fillCircle(22, -58, 22).fillStyle(0x43a047).fillCircle(-8, -86, 15);
-      break;
-    case 'bush':
-      g.fillStyle(0x3e8e41).fillCircle(-14, -10, 13).fillCircle(8, -13, 16).fillCircle(24, -8, 11);
-      break;
-    case 'cactus':
-      g.fillStyle(0x3f8f3f).fillRoundedRect(-7, -64, 14, 64, 7).fillRoundedRect(-24, -42, 18, 11, 5).fillRoundedRect(-24, -56, 9, 22, 5).fillRoundedRect(6, -50, 18, 11, 5).fillRoundedRect(15, -62, 9, 20, 5);
-      break;
-    default: // rock
-      g.fillStyle(0x8d939b).fillEllipse(0, -10, 40, 20).fillStyle(0xb4bac2).fillEllipse(-4, -13, 16, 9);
-  }
+  buildScenery(scene, map);
 }
 
 // ---------- effects ----------
@@ -174,8 +115,11 @@ function drawWorldObjects(under: Phaser.GameObjects.Graphics, g: Phaser.GameObje
   for (const c of v.crates) {
     if (!c.active) continue;
     const y = c.y + Math.sin(v.time * 4.5 + c.x) * 3;
-    under.fillStyle(0xc89b3c).fillRect(c.x - 14, y - 11, 28, 22);
-    under.lineStyle(2, 0x5a4210).strokeRect(c.x - 14, y - 11, 28, 22).lineBetween(c.x - 14, y - 11, c.x + 14, y + 11).lineBetween(c.x + 14, y - 11, c.x - 14, y + 11);
+    // a glowing supply case: dark body, amber rim, carry handle
+    under.fillStyle(0xffb02e, 0.14).fillCircle(c.x, y, 30).fillStyle(0xffb02e, 0.12).fillCircle(c.x, y, 21);
+    under.fillStyle(0x24184a).fillRoundedRect(c.x - 14, y - 11, 28, 22, 4);
+    under.lineStyle(2.5, 0xffb02e).strokeRoundedRect(c.x - 14, y - 11, 28, 22, 4);
+    under.lineStyle(2.5, 0xffb02e).lineBetween(c.x - 6, y - 3, c.x + 6, y - 3).lineBetween(c.x, y - 3, c.x, y + 7);
   }
 
   for (const gr of v.grenades) {
@@ -184,10 +128,14 @@ function drawWorldObjects(under: Phaser.GameObjects.Graphics, g: Phaser.GameObje
   }
   for (const b of v.bullets) {
     if (b.boom > 0) {
-      g.lineStyle(6, 0xff6633).lineBetween(b.x - b.vx * 0.027, b.y - b.vy * 0.027, b.x, b.y);
-      g.fillStyle(0xcccccc).fillCircle(b.x, b.y, 3);
-    } else {
-      g.lineStyle(3, 0xffff99).lineBetween(b.x - b.vx * 0.012, b.y - b.vy * 0.012, b.x, b.y);
+      g.lineStyle(10, 0xff6633, 0.25).lineBetween(b.x - b.vx * 0.03, b.y - b.vy * 0.03, b.x, b.y);
+      g.lineStyle(5, 0xff9a4a).lineBetween(b.x - b.vx * 0.027, b.y - b.vy * 0.027, b.x, b.y);
+      g.fillStyle(0xffffff).fillCircle(b.x, b.y, 3.5);
+    } else { // tracer: soft cyan glow around a white core
+      const tx = b.x - b.vx * 0.014;
+      const ty = b.y - b.vy * 0.014;
+      g.lineStyle(7, 0x2de2e6, 0.28).lineBetween(tx, ty, b.x, b.y);
+      g.lineStyle(2.5, 0xffffff).lineBetween(tx, ty, b.x, b.y);
     }
   }
   fx.draw(g);

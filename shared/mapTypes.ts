@@ -13,7 +13,11 @@ export interface PlatformDef {
 }
 
 export interface MapTheme {
+  /** Visual style, chosen by the client renderer. Defaults to 'sunset'. */
+  style?: 'sunset' | 'neon';
   skyTop: string;
+  /** Optional middle colour of the sky gradient. */
+  skyMid?: string;
   skyBottom: string;
   far: string;
   near: string;

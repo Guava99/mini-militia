@@ -5,11 +5,13 @@
  "width": 1800,
  "height": 1000,
  "theme": {
-  "skyTop": "#6fb1e4",
-  "skyBottom": "#d7f0c8",
-  "far": "#8db88b",
-  "near": "#5e9460",
-  "sun": "#fff2a0"
+  "style": "sunset",
+  "skyTop": "#10204f",
+  "skyMid": "#7a3fb0",
+  "skyBottom": "#ff7fb0",
+  "far": "#4a3a8f",
+  "near": "#2a2468",
+  "sun": "#ffe7a0"
  },
  "platforms": [
   {

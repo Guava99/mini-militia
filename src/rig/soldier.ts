@@ -18,7 +18,10 @@ const NECK: Vec = { x: -0.3, y: -17.4 };
 const JETPACK_AT: Vec = { x: -5.0, y: -10.5 };
 const NOZZLES: Vec[] = [{ x: -6.8, y: 11.4 }, { x: -2.6, y: 11.0 }];
 const GUN_FROM_SHOULDER: Vec = { x: 4.8, y: 3.2 };
-const FAR_TINT = 0x8a8a8a; // limbs on the far side of the body are darker, which separates them from the near ones
+const FAR_SHADE = 0.6; // limbs on the far side of the body are darker, which separates them from the near ones
+
+/** Scale each colour channel, to darken a team colour. */
+const shadeColor = (c: number, f: number) => (Math.round(((c >> 16) & 255) * f) << 16) | (Math.round(((c >> 8) & 255) * f) << 8) | Math.round((c & 255) * f);
 
 /**
  * One soldier built from separate sprites. Everything is driven by the simulation state (position, velocity,
@@ -44,7 +47,6 @@ export class SoldierRig {
   private nearUpper: Img;
   private nearFore: Img;
   private all: Img[];
-  private accents: Img[];
 
   private phase = 0;
   private breath = Math.random() * 6;
@@ -87,7 +89,6 @@ export class SoldierRig {
       this.torso, this.torsoAccent, this.nearThigh, this.nearShin, this.head, this.headAccent,
       this.weapon, this.flash, this.nearUpper, this.nearFore,
     ]);
-    this.accents = [this.torsoAccent, this.headAccent];
     this.all = [
       this.jetpack, this.farThigh, this.farShin, this.farUpper, this.farFore, this.torso, this.torsoAccent,
       this.nearThigh, this.nearShin, this.head, this.headAccent, this.weapon, this.nearUpper, this.nearFore,
@@ -101,8 +102,11 @@ export class SoldierRig {
 
   private applyTints() {
     for (const i of this.all) i.clearTint();
-    for (const i of [this.farThigh, this.farShin, this.farUpper, this.farFore]) i.setTint(FAR_TINT);
-    for (const i of this.accents) i.setTint(this.color);
+    // the body art is neutral grey with shading baked in, so a tint turns it into the team colour;
+    // the lights and visor shine (the accent sprites) and the weapon are left untinted
+    const far = shadeColor(this.color, FAR_SHADE);
+    for (const i of [this.jetpack, this.torso, this.head, this.nearThigh, this.nearShin, this.nearUpper, this.nearFore]) i.setTint(this.color);
+    for (const i of [this.farThigh, this.farShin, this.farUpper, this.farFore]) i.setTint(far);
     this.flashingWhite = false;
   }
 

@@ -1,61 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15 19" width="15" height="19">
   <defs>
-    <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="0.4">
-      <stop offset="0" stop-color="#2f3526"/>
-      <stop offset="0.5" stop-color="#4b5439"/>
-      <stop offset="1" stop-color="#6a7552"/>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="0.5">
+      <stop offset="0" stop-color="#b4b6cc"/>
+      <stop offset="0.45" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#c3c5d8"/>
     </linearGradient>
-    <linearGradient id="vest" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#262b1f"/>
-      <stop offset="0.6" stop-color="#3b4230"/>
-      <stop offset="1" stop-color="#4d563d"/>
-    </linearGradient>
-    <linearGradient id="pouch" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#434a37"/>
-      <stop offset="1" stop-color="#252a1d"/>
-    </linearGradient>
-    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#c5cad2"/>
-      <stop offset="1" stop-color="#6a707a"/>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d8d9e8"/>
+      <stop offset="1" stop-color="#9ea0b8"/>
     </linearGradient>
   </defs>
-  <!-- base shirt / body -->
-  <path d="M3 1.6 C3 0.6 5 0 8 0.2 L11.4 0.5 C12.8 1 13.2 3 13.2 6 L13 13 L12.6 17.8 L3.2 18 L2.4 9 Z" fill="url(#shirt)"/>
-  <!-- plate carrier -->
-  <path d="M3.4 2 L12.4 2.2 L12.9 12.9 L3.4 13.1 Z" fill="url(#vest)" stroke="#1d2018" stroke-width="0.3"/>
-  <!-- MOLLE stitching -->
-  <g stroke="#7d8765" stroke-width="0.18" opacity="0.5">
-    <path d="M4 3.6 L12 3.7"/><path d="M4 5 L12.2 5.1"/><path d="M4 6.4 L12.3 6.5"/><path d="M4 7.8 L12.4 7.9"/>
-    <path d="M4 9.2 L12.5 9.3"/><path d="M4 10.6 L12.6 10.7"/><path d="M4 12 L12.7 12.1"/>
-  </g>
-  <!-- shoulder strap + collar -->
-  <path d="M5 0.3 L8.6 0.3 L8.8 3.6 L5.2 3.6 Z" fill="#2c2d27" stroke="#14150f" stroke-width="0.2"/>
-  <path d="M8.2 0.3 C10 0.4 11.4 0.7 12 1.2 L12.2 2.2 L8.7 2.1 Z" fill="#232620"/>
-  <!-- magazine pouches -->
-  <g>
-    <rect x="9.2" y="6.2" width="3.7" height="3.3" rx="0.5" fill="url(#pouch)" stroke="#14150f" stroke-width="0.2"/>
-    <rect x="9.2" y="6.2" width="3.7" height="1.2" rx="0.5" fill="#4d563d"/>
-    <circle cx="11.05" cy="7.4" r="0.28" fill="url(#metal)"/>
-    <rect x="9.2" y="9.8" width="3.7" height="3" rx="0.5" fill="url(#pouch)" stroke="#14150f" stroke-width="0.2"/>
-    <rect x="9.2" y="9.8" width="3.7" height="1.1" rx="0.5" fill="#4d563d"/>
-    <circle cx="11.05" cy="10.9" r="0.28" fill="url(#metal)"/>
-  </g>
-  <!-- grenade on the vest -->
-  <ellipse cx="6.1" cy="8.3" rx="1.25" ry="1.55" fill="#46563a" stroke="#1d2418" stroke-width="0.2"/>
-  <path d="M5.2 7.9 L7 7.9 M5.1 8.5 L7.1 8.5" stroke="#2c3724" stroke-width="0.18"/>
-  <circle cx="6.1" cy="6.65" r="0.55" fill="none" stroke="#b6bcc6" stroke-width="0.22"/>
-  <!-- radio / admin pouch -->
-  <rect x="4.2" y="10.2" width="3.2" height="2.4" rx="0.4" fill="url(#pouch)" stroke="#14150f" stroke-width="0.18"/>
+  <!-- chunky body (tinted in game) -->
+  <path d="M3.2 2.6 C3.2 1.1 4.6 0.8 7.6 0.8 L11.2 0.9 C12.8 1.1 13.2 2.3 13.2 3.7 L13 12.8 C13 16.6 12.2 17.9 10.5 18 L5 18.1 C3.4 18.1 2.9 16.8 2.9 13.4 Z" fill="url(#body)" stroke="#2a2c4a" stroke-width="0.4"/>
+  <!-- backpack mount strip -->
+  <rect x="3" y="2.4" width="1.5" height="10.6" rx="0.6" fill="#8c8ea8"/>
+  <!-- chest plate -->
+  <rect x="6" y="3.4" width="6.2" height="5.6" rx="1.2" fill="url(#panel)" stroke="#2a2c4a" stroke-width="0.3"/>
+  <path d="M6.8 4.4 L11.4 4.4" stroke="#ffffff" stroke-width="0.4" stroke-linecap="round" opacity="0.7"/>
+  <!-- vents -->
+  <path d="M7 10.2 L11.8 10.2 M7 11.2 L11.8 11.2" stroke="#6d6f8a" stroke-width="0.3" stroke-linecap="round"/>
   <!-- belt -->
-  <rect x="2.6" y="13.4" width="10.6" height="2.4" fill="#2a2b25" stroke="#14150f" stroke-width="0.22"/>
-  <rect x="9.3" y="13.65" width="2" height="1.9" rx="0.25" fill="url(#metal)" stroke="#2c2d27" stroke-width="0.15"/>
-  <rect x="9.7" y="14" width="1.2" height="1.2" fill="#2c2d27"/>
-  <!-- holster / hip pouch -->
-  <path d="M3.4 14 L7.2 14 L7 18 L3.2 18 Z" fill="url(#pouch)" stroke="#14150f" stroke-width="0.22"/>
-  <path d="M3.5 14.9 L7.1 14.9" stroke="#6a7552" stroke-width="0.2" opacity="0.6"/>
-  <!-- folds -->
-  <path d="M3.6 11.6 C6 12.6 9 12.5 12.4 11.5" fill="none" stroke="#1d2018" stroke-width="0.3" opacity="0.35"/>
-  <path d="M3 16.2 C6 17 9.6 16.9 12.7 16.1" fill="none" stroke="#1d2018" stroke-width="0.3" opacity="0.4"/>
-  <!-- chest highlight -->
-  <path d="M10.2 2.4 L12.6 2.6 L12.8 7 L10.4 6.6 Z" fill="#ffffff" opacity="0.07"/>
+  <rect x="2.9" y="13.1" width="10.2" height="2.3" rx="0.7" fill="#3e4062" stroke="#14152b" stroke-width="0.25"/>
 </svg>

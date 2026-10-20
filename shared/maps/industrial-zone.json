@@ -5,11 +5,12 @@
  "width": 2600,
  "height": 1400,
  "theme": {
-  "skyTop": "#7d8793",
-  "skyBottom": "#c9ced4",
-  "far": "#8c949e",
-  "near": "#6b7480",
-  "sun": "#e8e8e8"
+  "style": "neon",
+  "skyTop": "#070a22",
+  "skyBottom": "#1b1450",
+  "far": "#1a1f4a",
+  "near": "#262060",
+  "sun": "#f4f1ff"
  },
  "platforms": [
   {

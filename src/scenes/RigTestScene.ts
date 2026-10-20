@@ -22,19 +22,19 @@ export class RigTestScene extends Phaser.Scene {
 
   create() {
     const zoom = Number(new URLSearchParams(window.location.search).get('zoom')) || 2.1;
-    this.cameras.main.setBackgroundColor('#8da38d');
+    this.cameras.main.setBackgroundColor('#3a2078');
     const poses: Pose[] = [
-      { label: 'idle / pistol', color: 0x3b82f6, state: { weapon: 'pistol', aim: 0.05 } },
-      { label: 'run / smg', color: 0xef4444, state: { weapon: 'smg', vx: 200, aim: 0.15 }, animate: (t, f) => { f.lastShot = t - ((t * 8) % 1) * 0.08; } },
-      { label: 'run back / shotgun', color: 0x22c55e, state: { weapon: 'shotgun', vx: 200, aim: Math.PI - 0.1 } },
-      { label: 'jetpack / sniper', color: 0xeab308, state: { weapon: 'sniper', onGround: false, thrusting: true, vy: -200, vx: 80, aim: -0.6 } },
-      { label: 'falling / rocket', color: 0xa855f7, state: { weapon: 'rocket', onGround: false, vy: 420, aim: 0.7 } },
-      { label: 'reload / smg', color: 0xf97316, state: { weapon: 'smg', aim: 0 }, animate: (t, f) => { f.reloadUntil = t + 0.6 + ((t % 2.4) / 2.4) * 0; const p = (t % 2.4) / 2.4; f.reloadUntil = t + 1.3 * (1 - p); } },
+      { label: 'idle / pistol', color: 0x2de2e6, state: { weapon: 'pistol', aim: 0.05 } },
+      { label: 'run / smg', color: 0xff3d9a, state: { weapon: 'smg', vx: 200, aim: 0.15 }, animate: (t, f) => { f.lastShot = t - ((t * 8) % 1) * 0.08; } },
+      { label: 'run back / shotgun', color: 0x6dff8a, state: { weapon: 'shotgun', vx: 200, aim: Math.PI - 0.1 } },
+      { label: 'jetpack / sniper', color: 0xffb02e, state: { weapon: 'sniper', onGround: false, thrusting: true, vy: -200, vx: 80, aim: -0.6 } },
+      { label: 'falling / rocket', color: 0x8a6cff, state: { weapon: 'rocket', onGround: false, vy: 420, aim: 0.7 } },
+      { label: 'reload / smg', color: 0xff6a3d, state: { weapon: 'smg', aim: 0 }, animate: (t, f) => { f.reloadUntil = t + 0.6 + ((t % 2.4) / 2.4) * 0; const p = (t % 2.4) / 2.4; f.reloadUntil = t + 1.3 * (1 - p); } },
       { label: 'hit / death', color: 0x06b6d4, state: { weapon: 'pistol', aim: 0 }, animate: (t, f) => { const c = t % 3.2; f.dead = c > 1.2; f.hp = c > 0.9 && c < 1.2 ? 40 : c <= 0.9 ? 100 : 0; } },
     ];
     const spacing = 82;
     const x0 = 120;
-    this.add.rectangle(640, GROUND_Y + 40, 4000, 80, 0x4a5a40).setDepth(0);
+    this.add.rectangle(640, GROUND_Y + 40, 4000, 80, 0x2b1760).setDepth(0);
     poses.forEach((pose, i) => {
       const x = x0 + i * spacing;
       const f: FighterState = {
